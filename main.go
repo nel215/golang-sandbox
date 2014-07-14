@@ -10,6 +10,17 @@ import (
     matrix "github.com/skelterjohn/go.matrix"
 )
 
+type AutoEncoder struct {
+}
+
+func NewAutoEncoder() *AutoEncoder {
+    return &AutoEncoder{}
+}
+
+func (ae *AutoEncoder) Train(x []float64) {
+    fmt.Println(x)
+}
+
 func main() {
     m1 := matrix.MakeDenseMatrix([]float64{1,2,3,4,5,6}, 3, 2)
     fmt.Println(m1)
@@ -20,14 +31,16 @@ func main() {
     reader := csv.NewReader(res.Body)
     reader.Comma = ';'
     //contents, _ := ioutil.ReadAll(res.Body)
+    testData := make([][]float64,0)
     for {
         col, err := reader.Read()
         if err == io.EOF { break }
         //strings.Split(col, ";")
         x := make([]float64, len(col))
         for i := range col { x[i], _ = strconv.ParseFloat(col[i], 64) }
-        m1 := matrix.MakeDenseMatrix(x, len(x), 1)
-        fmt.Println(m1)
+        testData = append(testData, x)
     }
+    ae := NewAutoEncoder()
+    ae.Train(testData[1])
 
 }
